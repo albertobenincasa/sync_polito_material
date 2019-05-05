@@ -1,6 +1,7 @@
 import subprocess
 import requests
 import getpass
+import time
 import html
 import json
 import re
@@ -15,6 +16,7 @@ class PolitoWebClass:
     subject_cookie = None
     last_update_remote = None
     last_update_local = None
+    video_lessons = False
     file_name = 'file_name'
 
     headers = {'User-Agent': 'python-requests'}
@@ -139,7 +141,16 @@ class PolitoWebClass:
             for res in content['result']:
                 
                 if res['name'].startswith('ZZZZZ'):
-                    # TO DO VIDEOLESSONS
+                    print("Do you want to dowload also videolesson? Enter:yes, Any:no")
+                    y = input()
+                    if y != "":
+                        continue
+                    
+                    folder_to_create = os.path.join(folder, "Videolessons")
+                    self._mkdir_if_not_exist(folder_to_create)
+                    print('Videolessons')
+                    new_path = self._path_join(folder_to_create, "Videolessons")
+                    self._get_video_lessons(folder_to_create, new_path, res['link'])
                     continue
                 
                 if res['type'] == 'dir':
@@ -174,7 +185,7 @@ class PolitoWebClass:
                 name = self._purge_name(name, 'strong')
                 open(os.path.join(folder, name), 'wb').write(file.content)
 
-    def _menu(self):
+    def _menu(self, code='0'):
         if self.subjects_list is None:
             self._get_subjects_list()
 
@@ -196,10 +207,10 @@ class PolitoWebClass:
                 continue
 
         self._select_subject(x - 1)
-
         print("Download finished, press ENTER to continue")
         input()
-        return True
+
+        return True            
 
     def _last_update_remote(self, folder_code):
         with requests.session() as s:
@@ -259,9 +270,26 @@ class PolitoWebClass:
 
     def _generate_video_url(self, code):
         url = None
-        # base_url = "https://didattica.polito.it/portal/pls/portal/sviluppo.videolezioni.vis?cor="
-        # base_url_e = "https://elearning.polito.it/gadgets/video/template_video.php?"
+        base_url = "https://didattica.polito.it/portal/pls/portal/sviluppo.videolezioni.vis?cor="
+        base_url_e = "https://elearning.polito.it/gadgets/video/template_video.php?"
         return url
+
+       def __generate_video_url(self, code, elearn):
+        base_url = "https://didattica.polito.it/portal/pls/portal/sviluppo.videolezioni.vis?cor="
+        base_url_e = "https://elearning.polito.it/gadgets/video/template_video.php?"
+        if not link.is_elearn:
+            url = base_url + link.codice
+        else:
+            with requests.session() as s:
+                s.cookies = self.login_cookie
+                data = s.get("https://didattica.polito.it/pls/portal30/sviluppo.materiale.json_dokeos_par?inc=" +
+                             link.codice).json()
+                url = base_url_e + urllib.parse.urlencode(data)
+        # print(url)
+        return url
+
+    def _get_video_lessons(self, folder, path, link):
+        pass
 
     # STATIC METHODS
 
@@ -288,3 +316,10 @@ class PolitoWebClass:
             return re.sub('[^a-zA-Z0-9 .]', '', self._purge_name(string)).strip()
         else:
             return string
+
+"""
+class Link:
+
+    code = None
+    year = None
+    is_elearn = False 
