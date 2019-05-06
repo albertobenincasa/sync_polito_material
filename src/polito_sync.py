@@ -268,26 +268,6 @@ class PolitoWebClass:
 
         return False
 
-    def _generate_video_url(self, code):
-        url = None
-        base_url = "https://didattica.polito.it/portal/pls/portal/sviluppo.videolezioni.vis?cor="
-        base_url_e = "https://elearning.polito.it/gadgets/video/template_video.php?"
-        return url
-
-       def __generate_video_url(self, code, elearn):
-        base_url = "https://didattica.polito.it/portal/pls/portal/sviluppo.videolezioni.vis?cor="
-        base_url_e = "https://elearning.polito.it/gadgets/video/template_video.php?"
-        if not link.is_elearn:
-            url = base_url + link.codice
-        else:
-            with requests.session() as s:
-                s.cookies = self.login_cookie
-                data = s.get("https://didattica.polito.it/pls/portal30/sviluppo.materiale.json_dokeos_par?inc=" +
-                             link.codice).json()
-                url = base_url_e + urllib.parse.urlencode(data)
-        # print(url)
-        return url
-
     def _get_video_lessons(self, folder, path, link):
         pass
 
