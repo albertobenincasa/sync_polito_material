@@ -150,7 +150,7 @@ class PolitoWebClass:
                     self._mkdir_if_not_exist(folder_to_create)
                     print('Videolessons')
                     new_path = self._path_join(folder_to_create, "Videolessons")
-                    self._get_video_lessons(folder_to_create, new_path, res['link'])
+                    self._get_video_lessons(folder_to_create, new_path, res['link'], res['id'])
                     continue
                 
                 if res['type'] == 'dir':
@@ -268,7 +268,34 @@ class PolitoWebClass:
 
         return False
 
-    def _get_video_lessons(self, folder, path, link):
+    def _get_video_lessons(self, folder, path, link, code):
+        base_url = "https://didattica.polito.it/portal/pls/portal/sviluppo.videolezioni.vis?cor="
+        base_url_e = "https://elearning.polito.it/gadgets/video/template_video.php?"
+        url = ""
+        if "elarning" not in link:
+            url = base_url + str(code)
+        else:
+            with requests.session() as session:
+                session.cookies = self.login_cookie
+                data = session.get("https://didattica.polito.it/pls/portal30/sviluppo.materiale.json_dokeos_par?inc=" + str(code)).json()
+                url = base_url_e + urllib.parse.urlencode(data)
+        
+        with requests.session() as session:
+            page = session.get(url)
+
+            if "didattica.polito.it" in url:
+                links = re.findall('href="(sviluppo\.videolezioni\.vis.*lez=\w*)">', page.text)
+                for i in rage(len(links)):
+                    links[i] = 'https://didattica.polito.it/pls/portal30/' + html.unescape(links[i])
+            elif "elearning.polito.it" in url:
+                links = re.findall("href='(template_video\.php\?[^']*)", r.text)
+                for i in range(len(links)):
+                    links[i] = 'https://elearning.polito.it/gadgets/video/' + html.unescape(links[i])
+            else:
+                print("Something went wrong")
+
+
+            print(page)
         pass
 
     # STATIC METHODS
@@ -296,10 +323,4 @@ class PolitoWebClass:
             return re.sub('[^a-zA-Z0-9 .]', '', self._purge_name(string)).strip()
         else:
             return string
-
-"""
-class Link:
-
-    code = None
-    year = None
-    is_elearn = False 
+            
