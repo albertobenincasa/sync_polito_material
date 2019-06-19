@@ -284,19 +284,24 @@ class PolitoWebClass:
             page = session.get(url)
 
             if "didattica.polito.it" in url:
-                links = re.findall('href="(sviluppo\.videolezioni\.vis.*lez=\w*)">', page.text)
-                for i in rage(len(links)):
+                links = re.findall('href="(.*)".*Video', page.text)
+                for i in range(len(links)):
                     links[i] = 'https://didattica.polito.it/pls/portal30/' + html.unescape(links[i])
             elif "elearning.polito.it" in url:
-                links = re.findall("href='(template_video\.php\?[^']*)", r.text)
+                links = re.findall("href='(template_video\.php\?[^']*)", page.text)
                 for i in range(len(links)):
                     links[i] = 'https://elearning.polito.it/gadgets/video/' + html.unescape(links[i])
             else:
                 print("Something went wrong")
 
-
-            print(page)
-        pass
+            video_lesson_counter = 0;
+            for link in links:
+                print(link)
+                video_lesson_counter = video_lesson_counter + 1
+                filename = "Videolezione_" + str(video_lesson_counter)
+                print('Scaricando' + filename)
+                file = session.get(link)
+                open(os.path.join(*[self.download_folder, path, filename]), 'wb').write(file.content)
 
     # STATIC METHODS
 
