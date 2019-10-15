@@ -22,6 +22,6 @@ if __name__ == "__main__":
     if settings['credentials']['enabled']:
         session.login(settings['credentials']['username'], settings['credentials']['password'])
     else:
-        session.login()  
+        session.login()
 
     session.menu()
