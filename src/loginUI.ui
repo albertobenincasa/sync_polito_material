@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>778</width>
-    <height>688</height>
+    <width>577</width>
+    <height>484</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,8 +77,8 @@ QCheckBox
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>130</y>
+      <x>40</x>
+      <y>30</y>
       <width>501</width>
       <height>381</height>
      </rect>
@@ -170,7 +170,7 @@ QCheckBox
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>778</width>
+     <width>577</width>
      <height>20</height>
     </rect>
    </property>
