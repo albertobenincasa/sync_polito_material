@@ -12,7 +12,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         super(LoginWindow, self).__init__()
         self.session = session
 
-        uic.loadUi('login_window.ui', self)
+        uic.loadUi('loginUI.ui', self)
 
         self.LoginButton = self.findChild(QtWidgets.QPushButton, 'loginButton')  # Find the button
         self.LoginButton.clicked.connect(self.printButtonPressed)  # Remember to pass the definition/method, not the return value!
