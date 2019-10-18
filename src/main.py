@@ -28,7 +28,6 @@ except:
     print("Error: rename settings file as settings.json")
 
 session.set_download_folder(settings['download_folder'])
-
 session.set_file_name('web')
 app = QtWidgets.QApplication(sys.argv)
 window = LoginWindow(session)

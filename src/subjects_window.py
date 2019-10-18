@@ -7,19 +7,16 @@ from polito_sync import PolitoWebClass
 import sys
 
 
-class MyListWidget(QListWidget):
-
-    def clicked(self, item):
-        QMessageBox.information(self, "ListWidget", "You clicked: " + item.text())
-
-
 class SubjectsWindow(QtWidgets.QMainWindow):
     def __init__(self, session):
         super(SubjectsWindow, self).__init__()
         self.session = session
-        # self.session = PolitoWebClass()
 
-        self.listWidget = QListWidget()
+        uic.loadUi('listaMaterie.ui', self)
+
+        #self.listWidget = QListWidget()
+        self.listWidget = self.findChild(QtWidgets.QListWidget, 'listMaterie')
+
         # Resize width and height
         self.listWidget.resize(500, 400)
 
@@ -28,7 +25,7 @@ class SubjectsWindow(QtWidgets.QMainWindow):
         self.lista_materie = dict()
         self.selezionato = None
 
-    def show(self):
+    def showMaterie(self):
         list_sub = self.session.get_subjects_list()
         print(list_sub)
         d = dict()
@@ -38,7 +35,7 @@ class SubjectsWindow(QtWidgets.QMainWindow):
             print(v[2])
             self.lista_materie[v[2]] = i
             i = i + 1
-        self.listWidget.show()
+        self.show()
         print(self.lista_materie)
 
     def clicked(self, item):
@@ -58,3 +55,7 @@ class SubjectsWindow(QtWidgets.QMainWindow):
     def scarica_materiale(self):
         self.session.select_subject(self.lista_materie[self.selezionato])
         self.selezionato = None
+        msg = QMessageBox()
+        msg.setWindowTitle("  ")
+        msg.setText("Materiale scaricato con successo!")
+        ret = msg.exec_()

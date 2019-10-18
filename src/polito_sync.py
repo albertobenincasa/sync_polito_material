@@ -127,7 +127,7 @@ class PolitoWebClass:
 
             self.subject_cookie = s.cookies
             self._get_path_content(directory, '/')
-
+        print("[ DOWNLOAD COMPLETED ]")
     def _get_path_content(self, folder, path, code='0'):
         with requests.session() as s:
             s.cookies = self.subject_cookie
@@ -183,7 +183,6 @@ class PolitoWebClass:
                         self._file_download(folder, file_name, path, res['code'])
                     else:
                         print("[ UPTODATE ]" + file_name)
-
     def _file_download(self, folder, name, path, code):
         with requests.session() as s:
             s.cookies = self.subject_cookie
