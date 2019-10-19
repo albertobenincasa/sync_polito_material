@@ -21,7 +21,7 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         uic.loadUi('loginUI.ui', self)
 
-        # self.setGeometry(200,200,200,200)
+        #self.setGeometry(500,500,500,500)
 
         self.LoginButton = self.findChild(QtWidgets.QPushButton, 'loginButton')  # Find the button
         self.LoginButton.clicked.connect(

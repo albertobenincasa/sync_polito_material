@@ -20,17 +20,18 @@ from login_window import LoginWindow
 #     win.show()
 #     sys.exit(app.exec_())
 #
-session = PolitoWebClass()
-try:
-    with open("settings.json") as s:
-        settings = json.load(s)
-except:
-    print("Error: rename settings file as settings.json")
+if __name__ == "__main__":
+    session = PolitoWebClass()
+    try:
+        with open("settings.json") as s:
+            settings = json.load(s)
+    except:
+        print("Error: rename settings file as settings.json")
 
-session.set_download_folder(settings['download_folder'])
-session.set_file_name('web')
-app = QtWidgets.QApplication(sys.argv)
-window = LoginWindow(session)
-window.show()
+    session.set_download_folder(settings['download_folder'])
+    session.set_file_name('web')
+    app = QtWidgets.QApplication(sys.argv)
+    window = LoginWindow(session)
+    window.show()
 
-sys.exit(app.exec_())
+    sys.exit(app.exec_())

@@ -152,6 +152,7 @@ class PolitoWebClass:
             for res in content['result']:
 
                 if res['name'].startswith('ZZZZZ'):
+                    continue
                     print("Do you want to dowload also videolesson? Enter:yes, Any:no")
                     y = input()
                     if y != "":

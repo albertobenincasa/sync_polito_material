@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>593</width>
-    <height>512</height>
+    <width>577</width>
+    <height>484</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,18 +24,45 @@ QFrame
   padding: 8% 0 0;
   margin: auto;*/
   background: #333;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+ 
 
-}</string>
+}
+QListWidget
+{
+
+}
+QListView
+{
+	font-family: &quot;Roboto&quot;, sans-serif;
+	font-size: 20px;  
+	margin-left: 12px;
+	border: 0;
+    outline: none;
+
+
+
+}
+QListWidget::item
+{ 
+   color: #FFFFFF;	 
+  background: #333;
+  padding: 5 5 5 5; 
+
+}
+
+QListWidget::item:hover
+{
+	 background: #43A047;
+} </string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>50</y>
-      <width>401</width>
-      <height>331</height>
+      <x>10</x>
+      <y>10</y>
+      <width>581</width>
+      <height>451</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -48,10 +75,13 @@ QFrame
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
-       <width>361</width>
-       <height>291</height>
+       <y>10</y>
+       <width>541</width>
+       <height>431</height>
       </rect>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -61,12 +91,11 @@ QFrame
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>593</width>
+     <width>577</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
