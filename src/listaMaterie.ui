@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>577</width>
+    <height>484</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#MainWindow
+{
+background: #333;
+}
+QFrame
+{
+ /* width: 360px;
+  padding: 8% 0 0;
+  margin: auto;*/
+  background: #333;
+ 
+
+}
+QListWidget
+{
+
+}
+QListView
+{
+	font-family: &quot;Roboto&quot;, sans-serif;
+	font-size: 20px;  
+	margin-left: 12px;
+	border: 0;
+    outline: none;
+
+
+
+}
+QListWidget::item
+{ 
+   color: #FFFFFF;	 
+  background: #333;
+  padding: 5 5 5 5; 
+
+}
+
+QListWidget::item:hover
+{
+	 background: #43A047;
+} </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>581</width>
+      <height>451</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QListWidget" name="listMaterie">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>541</width>
+       <height>431</height>
+      </rect>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>577</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

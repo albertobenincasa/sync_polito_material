@@ -8,8 +8,8 @@ import re
 import os
 import urllib
 
-class PolitoWebClass:
 
+class PolitoWebClass:
     download_folder = None
     subjects_list = None
     login_cookie = None
@@ -45,12 +45,23 @@ class PolitoWebClass:
 
     def login(self, username=None, password=None):
         print("Credentials for http://didattica.polito.it")
-        while not self._login(username, password):
+        if not self._login(username, password):
             print("Login failed, try again!")
-    
+            return False
+        return True
+
     def menu(self):
         while self._menu():
             self._clear()
+
+    def get_subjects_list(self):
+        print("Richiesta materie")
+        if self.subjects_list is None:
+            self._get_subjects_list()
+        return self.subjects_list
+
+    def select_subject(self, index):
+        self._select_subject(index)
 
     # PRIVATE
 
@@ -66,8 +77,8 @@ class PolitoWebClass:
 
         with requests.session() as s:
             s.get('https://idp.polito.it/idp/x509mixed-login', headers=self.headers)
-            r = s.post('https://idp.polito.it/idp/Authn/X509Mixed/UserPasswordLogin', 
-                        data={'j_username': user, 'j_password': passw}, headers=self.headers)
+            r = s.post('https://idp.polito.it/idp/Authn/X509Mixed/UserPasswordLogin',
+                       data={'j_username': user, 'j_password': passw}, headers=self.headers)
             res = html.unescape(re.findall('name="RelayState".*value="(.*)"', r.text))
 
             if len(res) > 0:
@@ -113,20 +124,20 @@ class PolitoWebClass:
             s.get('https://didattica.polito.it/pls/portal30/sviluppo.chiama_materia',
                   params={'cod_ins': self.subjects_list[index][0], 'incarico': self.subjects_list[index][1]},
                   headers=self.headers)
-            
+
             self.subject_cookie = s.cookies
             self._get_path_content(directory, '/')
-
+        print("[ DOWNLOAD COMPLETED ]")
     def _get_path_content(self, folder, path, code='0'):
         with requests.session() as s:
             s.cookies = self.subject_cookie
 
             if code != '0':
                 json_result = s.get(self.handler_url, params={'action': 'list', 'path': path, 'code': code},
-                                     headers=self.headers)
+                                    headers=self.headers)
             else:
                 json_result = s.get(self.handler_url, params={'action': 'list', 'path': path},
-                                     headers=self.headers)
+                                    headers=self.headers)
 
             content = json_result.json()
 
@@ -135,24 +146,25 @@ class PolitoWebClass:
                     folder_code = content['result'][0]['parent_code']
                     self._need_to_update(folder, folder_code)
                     self._save_update_file(folder)
-                except :
+                except:
                     pass
 
             for res in content['result']:
-                
+
                 if res['name'].startswith('ZZZZZ'):
+                    continue
                     print("Do you want to dowload also videolesson? Enter:yes, Any:no")
                     y = input()
                     if y != "":
                         continue
-                    
+
                     folder_to_create = os.path.join(folder, "Videolessons")
                     self._mkdir_if_not_exist(folder_to_create)
                     print('Videolessons')
                     new_path = self._path_join(folder_to_create, "Videolessons")
                     self._get_video_lessons(folder_to_create, new_path, res['link'], res['id'])
                     continue
-                
+
                 if res['type'] == 'dir':
                     name = self._purge_name(res['name'])
                     folder_to_create = os.path.join(folder, name)
@@ -161,7 +173,7 @@ class PolitoWebClass:
                     print('Folder: ' + name)
                     new_path = self._path_join(folder_to_create, name)
 
-                    #recursion
+                    # recursion
                     self._get_path_content(folder_to_create, new_path, res['code'])
 
                 elif res['type'] == 'file':
@@ -172,7 +184,6 @@ class PolitoWebClass:
                         self._file_download(folder, file_name, path, res['code'])
                     else:
                         print("[ UPTODATE ]" + file_name)
-
     def _file_download(self, folder, name, path, code):
         with requests.session() as s:
             s.cookies = self.subject_cookie
@@ -210,7 +221,7 @@ class PolitoWebClass:
         print("Download finished, press ENTER to continue")
         input()
 
-        return True            
+        return True
 
     def _last_update_remote(self, folder_code):
         with requests.session() as s:
@@ -248,7 +259,7 @@ class PolitoWebClass:
             else:
                 return False
         else:
-            return True 
+            return True
 
     def _need_to_update_this(self, folder, file_name, data):
         file_name = self._purge_name(file_name)
@@ -277,9 +288,11 @@ class PolitoWebClass:
         else:
             with requests.session() as session:
                 session.cookies = self.login_cookie
-                data = session.get("https://didattica.polito.it/pls/portal30/sviluppo.materiale.json_dokeos_par?inc=" + str(code)).json()
+                data = session.get(
+                    "https://didattica.polito.it/pls/portal30/sviluppo.materiale.json_dokeos_par?inc=" + str(
+                        code)).json()
                 url = base_url_e + urllib.parse.urlencode(data)
-        
+
         with requests.session() as session:
             page = session.get(url)
 
@@ -310,7 +323,7 @@ class PolitoWebClass:
         if a.endswith('/'):
             return a + b
         else:
-            return a + '/' + b    
+            return a + '/' + b
 
     @staticmethod
     def _mkdir_if_not_exist(folder):
@@ -328,4 +341,3 @@ class PolitoWebClass:
             return re.sub('[^a-zA-Z0-9 .]', '', self._purge_name(string)).strip()
         else:
             return string
-            
