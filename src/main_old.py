@@ -10,7 +10,7 @@ if __name__ == "__main__":
     settings = None
 
     try:
-        with open("settings.json") as s:
+        with open(".settings.json") as s:
             settings = json.load(s)
     except:
         print("Error: rename settings file as settings.json")

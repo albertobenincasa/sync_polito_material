@@ -23,12 +23,19 @@ from login_window import LoginWindow
 if __name__ == "__main__":
     session = PolitoWebClass()
     try:
-        with open("settings.json") as s:
+        with open(".settings.json") as s:
             settings = json.load(s)
     except:
-        print("Error: rename settings file as settings.json")
+        #json doesn' t exist
+        #print("Error: rename settings file as settings.json")
+        with open(".settings.json","w") as s:
+            dict_json = {"download_folder": "", "credentials": {"enabled": 0, "username": "", "password": ""}}
+            new_json = json.dump(dict_json,s,ensure_ascii=False, indent=4)
+            print(new_json)
 
-    session.set_download_folder(settings['download_folder'])
+    print(settings)
+    #settings = json.load(s)
+    #session.set_download_folder(settings['download_folder'])
     session.set_file_name('web')
     app = QtWidgets.QApplication(sys.argv)
     window = LoginWindow(session)
