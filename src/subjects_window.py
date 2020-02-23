@@ -1,5 +1,7 @@
+import json
+
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidget, QFileDialog
 from polito_sync import PolitoWebClass
 from PyQt5.QtWidgets import QMessageBox
 from polito_sync import PolitoWebClass
@@ -11,6 +13,11 @@ class SubjectsWindow(QtWidgets.QMainWindow):
     def __init__(self, session):
         super(SubjectsWindow, self).__init__()
         self.session = session
+        try:
+            with open(".settings.json") as s:
+                self.settings = json.load(s)
+        except:
+            print("Error: rename settings file as settings.json")
 
         uic.loadUi('listaMaterie.ui', self)
 
@@ -53,6 +60,12 @@ class SubjectsWindow(QtWidgets.QMainWindow):
             self.scarica_materiale()
 
     def scarica_materiale(self):
+
+        file = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        file.replace("/","\\\\")
+
+        self.session.set_download_folder(file)
+
         self.session.select_subject(self.lista_materie[self.selezionato])
         self.selezionato = None
         msg = QMessageBox()

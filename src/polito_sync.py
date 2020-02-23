@@ -115,8 +115,11 @@ class PolitoWebClass:
             self.subjects_list = re.findall("cod_ins=(.+)&incarico=([0-9]+).+>(.+)[ ]*<", hp.text)
 
     def _select_subject(self, index):
+
         subject_name = self._purge_name(self.subjects_list[index][2])
+        print(subject_name)
         directory = os.path.join(self.download_folder, subject_name)
+        print(directory)
         self._mkdir_if_not_exist(directory)
 
         with requests.session() as s:

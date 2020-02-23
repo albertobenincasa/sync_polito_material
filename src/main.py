@@ -32,10 +32,16 @@ if __name__ == "__main__":
             dict_json = {"download_folder": "", "credentials": {"enabled": 0, "username": "", "password": ""}}
             new_json = json.dump(dict_json,s,ensure_ascii=False, indent=4)
             print(new_json)
+            s.close()
+            try:
+                with open(".settings.json") as ss:
+                    settings = json.load(ss)
 
-    print(settings)
-    #settings = json.load(s)
-    #session.set_download_folder(settings['download_folder'])
+            except:
+                print("Error in json generation")
+                exit(1)
+
+
     session.set_file_name('web')
     app = QtWidgets.QApplication(sys.argv)
     window = LoginWindow(session)
