@@ -14,7 +14,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         super(LoginWindow, self).__init__()
         self.session = session
         try:
-            with open("settings.json") as s:
+            with open(".settings.json") as s:
                 self.settings = json.load(s)
         except:
             print("Error: rename settings file as settings.json")
@@ -39,10 +39,11 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         self.secondWindow = SubjectsWindow(session)
 
+        #REMEMBER ME
         #enabled = 1   not enalbled = 0
         if self.settings['credentials']['enabled']:
             print(self.settings['credentials']['enabled'])
-            us = QtWidgets.QLineEdit
+            #us = QtWidgets.QLineEdit
             self.username.setText(self.settings['credentials']['username'])
             self.pwd.setText(self.settings['credentials']['password'])
             self.checkBox.setCheckState(2)
@@ -68,14 +69,14 @@ class LoginWindow(QtWidgets.QMainWindow):
         # self.s.write(self.settings)
         print(self.settings)
         # self.settings.write()
-        with open("settings.json", 'w') as s:
+        with open(".settings.json", 'w') as s:
             json.dump(self.settings, s)
 
     def delete_credentials(self):
         self.settings['credentials']['username'] = None
         self.settings['credentials']['password'] = None
         self.settings['credentials']['enabled'] = 0
-        with open("settings.json", 'w') as s:
+        with open(".settings.json", 'w') as s:
             json.dump(self.settings, s)
 
     def popup_error_username_password(self):
